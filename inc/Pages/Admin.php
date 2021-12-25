@@ -21,6 +21,10 @@ class Admin extends BaseController
 		$this->callbacks = new AdminCallbacks();
 		$this->set_pages();
 		$this->set_subpages();
+		$this->set_settings();
+		$this->set_sections();
+		$this->set_fields();
+
 		$this->settings->add_pages($this->pages)->add_sub_pages($this->subpages)->register();
 	}
 	public function set_pages()
@@ -79,5 +83,46 @@ class Admin extends BaseController
 				},
 			)
 		);
+	}
+	public function set_settings()
+	{
+		$args = array(
+			array(
+				'option_group' => "alecaddd_options_group",
+				'option_name' => 'text-example',
+				'callback' => array($this->callbacks, 'alecaddd_options_group')
+			)
+		);
+		$this->settings->add_settings($args);
+	}
+	public function set_sections()
+	{
+		$args = array(
+			array(
+				'id' => "alecaddd_admin_index",
+				'title' => 'Settings',
+				'callback' => array($this->callbacks, 'alecaddd_admin_section'),
+				'page' => 'Alecaddd-plugin'
+			)
+		);
+		$this->settings->add_sections($args);
+	}
+
+	public function set_fields()
+	{
+		$args = array(
+			array(
+				'id' => "alecaddd_options_group",
+				'title' => 'Text Example',
+				'callback' => array($this->callbacks, 'alecaddd_text_example'),
+				'page' => 'Alecaddd-plugin',
+				'section' => 'alecaddd_admin_index',
+				'args' => array(
+					'label_for' => 'text_example',
+					'class' => 'example-class'
+				)
+			)
+		);
+		$this->settings->add_fields($args);
 	}
 }
